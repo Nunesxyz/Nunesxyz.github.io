@@ -96,6 +96,8 @@ body {
     gap: 12px;
     cursor: pointer;
     transition: 0.3s;
+    text-decoration: none;
+    color: #fff;
 }
 
 .script-card:hover {
@@ -129,11 +131,10 @@ body {
 }
 
 .team-card {
-    min-width: 220px;
-}
-
-.team-card {
-    flex: 1;
+    flex: 0 0 240px;
+    max-width: 240px;
+    display: flex;
+    flex-direction: column;
     background: #0a0a0a;
     border: 1px solid #1f1f1f;
     border-radius: 12px;
@@ -148,8 +149,9 @@ body {
 
 .team-avatar {
     width: 100%;
-    height: 110px;
+    height: 140px;
     object-fit: cover;
+    display: block;
 }
 
 .team-card-body {
@@ -164,6 +166,12 @@ body {
 .team-name {
     font-size: 14px;
     font-weight: 600;
+}
+
+.team-username {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 2px;
 }
 
 /* PLAYER */
@@ -209,7 +217,6 @@ body {
     animation-play-state: running;
 }
 
-/* ===== ONDAS DE ÁUDIO (ADICIONADO) ===== */
 .waves {
     display: flex;
     gap: 2px;
@@ -289,30 +296,44 @@ body {
 
     <div class="section-title">Scripts & Bookmarklets</div>
 
-    <div class="script-card">
-        <svg class="script-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8">
-            <path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z"/>
-        </svg>
+    <a class="script-card" href="https://www.google.com.br/search?q=&sca_esv=9977c0f731d603ad&sxsrf=ANbL-n5fpgivv2Zfmf0oMwt4SqBx6HIasA%3A1772187780375&source=hp&ei=hHChadT5FPPL1sQP3siMqQQ&iflsig=AFdpzrgAAAAAaaF-lB_DG03TYZNYfIrrs1_y0owhQwiz&aep=22&udm=50&ved=0ahUKEwjUy_34ufmSAxXzpZUCHV4kI0UQteYPCBc&oq=&gs_lp=Egdnd3Mtd2l6IgBIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEByAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcAgAgA&sclient=gws-wiz&safe=active&ssui=on" target="_blank">
+        <i data-lucide="sparkles"></i>
         Gemini IA
+    </a>
+
+    <div class="script-card" id="tarefaSP">
+        <i data-lucide="file-code"></i>
+        Tarefa SP
+    </div>
+
+    <div class="script-card" id="redacaoIA">
+        <i data-lucide="file-text"></i>
+        Redação IA
     </div>
 
     <h2 id="equipe-heading">Equipe</h2>
 
     <div class="team-layout">
         <div class="team-row">
+
             <div class="team-card">
                 <img class="team-avatar" src="https://github.com/Nunesxyz.png">
                 <div class="team-card-body">
+                    <p class="team-role-label">Fundador</p>
                     <p class="team-name">Nunesxyz</p>
+                    <p class="team-username">@Nunesxyz</p>
                 </div>
             </div>
 
             <div class="team-card">
                 <img class="team-avatar" src="https://github.com/jlbd122ato.png">
                 <div class="team-card-body">
+                    <p class="team-role-label">Co-Fundador</p>
                     <p class="team-name">Jlbd122ato</p>
+                    <p class="team-username">@jlbd122ato</p>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -324,13 +345,8 @@ body {
 
     <div class="disc"></div>
 
-    <!-- ONDAS -->
     <div class="waves">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span><span></span><span></span>
     </div>
 
     <div class="controls">
@@ -345,7 +361,28 @@ body {
 <script>
 lucide.createIcons();
 
-const playlist = [
+const tarefaSPJS = `javascript:(function(){var qCards=document.querySelectorAll('div[questao]'),p="Aja como um aluno de 9º ano. Resolva em JSON: {\"gabarito\":{\"1\":\"A, B\",\"2\":\"Frase ordenada\",\"3\":\"Resposta dissertativa\",\"4\":\"PALAVRA\"}}. REGRAS: 1. Nas questões de ordenar, use EXATAMENTE as peças fornecidas, sem trocar pontos ou letras. 2. Se a questão for de preencher quadradinhos (blocos), responda a palavra ou letra correspondente. 3. Responda APENAS o JSON puro. Base:\\n\\n";qCards.forEach((c,i)=>{var e=c.querySelector('.ql-editor')?.innerText||"",pks=Array.from(c.querySelectorAll('.css-12g5loc')).map(k=>k.innerText).join(', '),alts=Array.from(c.querySelectorAll('.ql-editor p')).filter(el=>el.innerText.match(/^[A-E]\\)/)).map(el=>el.innerText).join(' | '),ins=c.querySelectorAll('input[tipoatividade="tarefa"]').length;p+="Q"+(i+1)+": "+e+(pks?" (PEÇAS: "+pks+")":"")+(alts?" (OPÇÕES: "+alts+")":"")+(ins?" (LACUNAS: "+ins+" blocos)":"")+"\\n\\n"});navigator.clipboard.writeText(p);})()`;
+
+const redacaoJS = `javascript:(function(){var nomeElem=document.querySelector('.css-18q9z8m'),nomeAluno=nomeElem?nomeElem.innerText.replace(/Usuário:/i,'').trim():'estudante',tD=document.querySelector('.ql-editor'),bT=tD?tD.innerText:"";var p="faca uma visao geral por IA e responda em JSON: {\\\"titulo\\\":\\\"...\\\",\\\"redacao\\\":\\\"...\\\"}. Base: "+bT;navigator.clipboard.writeText(p);})()`;
+
+document.getElementById("tarefaSP").addEventListener("click", (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(tarefaSPJS).catch(()=>{});
+});
+
+document.getElementById("redacaoIA").addEventListener("click", (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(redacaoJS).catch(()=>{});
+});
+</script>
+
+<script>
+let i=0;
+const audio=document.getElementById("audio");
+const player=document.getElementById("player");
+const title=document.getElementById("title");
+
+const playlist=[
 {
     title:"To Be Continued",
     src:"https://raw.githubusercontent.com/Nunesxyz/musicas-6/main/To_Be_Continued.mp3"
@@ -355,11 +392,6 @@ const playlist = [
     src:"https://raw.githubusercontent.com/Nunesxyz/musicas-6/main/soldier_poet_king.mp3"
 }
 ];
-
-let i=0;
-const audio=document.getElementById("audio");
-const player=document.getElementById("player");
-const title=document.getElementById("title");
 
 function load(index){
     i=index;
@@ -386,36 +418,29 @@ window.addEventListener("load",()=>load(0));
 
 let drag=false,ox=0,oy=0;
 
-player.addEventListener("mousedown",(e)=>{
+player.addEventListener("pointerdown",(e)=>{
     drag=true;
+    player.setPointerCapture(e.pointerId);
     ox=e.clientX-player.offsetLeft;
     oy=e.clientY-player.offsetTop;
+    e.preventDefault();
 });
 
-document.addEventListener("mousemove",(e)=>{
+player.addEventListener("pointermove",(e)=>{
     if(!drag)return;
     player.style.left=(e.clientX-ox)+"px";
     player.style.top=(e.clientY-oy)+"px";
 });
 
-document.addEventListener("mouseup",()=>drag=false);
-
-player.addEventListener("touchstart",(e)=>{
-    const t=e.touches[0];
-    drag=true;
-    ox=t.clientX-player.offsetLeft;
-    oy=t.clientY-player.offsetTop;
+player.addEventListener("pointerup",(e)=>{
+    drag=false;
+    try{player.releasePointerCapture(e.pointerId);}catch(err){}
 });
 
-document.addEventListener("touchmove",(e)=>{
-    if(!drag)return;
-    const t=e.touches[0];
-    player.style.left=(t.clientX-ox)+"px";
-    player.style.top=(t.clientY-oy)+"px";
+player.addEventListener("pointercancel",()=>{
+    drag=false;
 });
-
-document.addEventListener("touchend",()=>drag=false);
 </script>
 
 </body>
-  </html>
+    </html>
