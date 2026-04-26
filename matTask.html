@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matific Task Helper</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    font-family:Inter,sans-serif;
+    background:#000;
+    color:#fff;
+}
+
+.dashboard{
+    width:92%;
+    max-width:980px;
+    margin:0 auto;
+    padding:35px 0 120px;
+}
+
+.header{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:25px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#0a0a0a;
+    border:1px solid #1f1f1f;
+    border-radius:14px;
+    padding:16px;
+    transition:.25s;
+}
+
+.card.active{
+    transform:translateY(-8px);
+    border-color:#fff;
+    box-shadow:0 12px 30px rgba(255,255,255,0.08);
+}
+
+.title{
+    font-size:14px;
+    opacity:.7;
+    margin-bottom:10px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    background:#0f0f0f;
+    border:1px solid #222;
+    border-radius:8px;
+    color:#fff;
+    outline:none;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#fff;
+    border:none;
+    border-radius:10px;
+    font-weight:600;
+    margin-top:10px;
+}
+
+.result{
+    margin-top:10px;
+    font-size:13px;
+    opacity:.8;
+    white-space:pre-wrap;
+}
+
+.kb{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    margin-top:10px;
+}
+
+.kb button{
+    padding:8px;
+    background:#111;
+    color:#fff;
+    border:1px solid #222;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+<div class="header">Matific Task Helper</div>
+
+<div class="grid">
+
+<div class="card">
+<div class="title"><i data-lucide="calculator"></i> Calculadora Geral</div>
+<input id="expr" readonly>
+
+<div class="kb">
+<button onclick="typeKey('7')">7</button>
+<button onclick="typeKey('8')">8</button>
+<button onclick="typeKey('9')">9</button>
+<button onclick="typeKey('/')">/</button>
+<button onclick="typeKey('(')">(</button>
+
+<button onclick="typeKey('4')">4</button>
+<button onclick="typeKey('5')">5</button>
+<button onclick="typeKey('6')">6</button>
+<button onclick="typeKey('*')">*</button>
+<button onclick="typeKey(')')">)</button>
+
+<button onclick="typeKey('1')">1</button>
+<button onclick="typeKey('2')">2</button>
+<button onclick="typeKey('3')">3</button>
+<button onclick="typeKey('-')">-</button>
+<button onclick="typeKey('!')">!</button>
+
+<button onclick="typeKey('0')">0</button>
+<button onclick="typeKey('.')">.</button>
+<button onclick="typeKey('+')">+</button>
+<button onclick="typeKey('^')">^</button>
+<button onclick="back()">⌫</button>
+</div>
+
+<button onclick="calc()">Calcular</button>
+<div class="result" id="res1"></div>
+</div>
+
+<div class="card">
+<div class="title"><i data-lucide="sigma"></i> Fração / Potência</div>
+
+<input id="num" readonly>
+<input id="den" readonly>
+
+<div class="kb">
+<button onclick="typeKey('7')">7</button>
+<button onclick="typeKey('8')">8</button>
+<button onclick="typeKey('9')">9</button>
+<button onclick="typeKey('^')">^</button>
+<button onclick="typeKey('(')">(</button>
+
+<button onclick="typeKey('4')">4</button>
+<button onclick="typeKey('5')">5</button>
+<button onclick="typeKey('6')">6</button>
+<button onclick="typeKey('/')">/</button>
+<button onclick="typeKey(')')">)</button>
+
+<button onclick="typeKey('1')">1</button>
+<button onclick="typeKey('2')">2</button>
+<button onclick="typeKey('3')">3</button>
+<button onclick="typeKey('!')">!</button>
+<button onclick="back()">⌫</button>
+</div>
+
+<button onclick="frac()">Resolver</button>
+<div class="result" id="res2"></div>
+</div>
+
+<div class="card">
+<div class="title"><i data-lucide="fuel"></i> Conversão</div>
+
+<input id="gas" placeholder="texto por extenso">
+<button onclick="parseGas()">Pesquisar</button>
+<div class="result" id="res3"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+lucide.createIcons();
+
+/* FOCO FIXO */
+let activeField = document.getElementById("expr");
+
+document.querySelectorAll("input").forEach(i=>{
+    i.addEventListener("click",()=>{
+        activeField = i;
+    });
+});
+
+function typeKey(v){
+    if(!activeField) return;
+    activeField.value += v;
+}
+
+function back(){
+    if(!activeField) return;
+    activeField.value = activeField.value.slice(0,-1);
+}
+
+/* bloqueio teclado físico */
+["expr","num","den","gas"].forEach(id=>{
+    let el=document.getElementById(id);
+    el.addEventListener("keydown",e=>e.preventDefault());
+    el.addEventListener("paste",e=>e.preventDefault());
+});
+
+function safe(e){
+    try{
+        e=e.replace(/\^/g,"**");
+        return Function("return "+e)();
+    }catch{return NaN;}
+}
+
+/* APROXIMADO RESTAURADO */
+function fix(n){
+    if(isNaN(n)) return 0;
+    return Math.round(n*100)/100;
+}
+
+function calc(){
+    let r = safe(document.getElementById("expr").value);
+    document.getElementById("res1").innerText =
+    "Resultado exato: " + r + "\nAproximado: " + fix(r);
+}
+
+function frac(){
+    let n=safe(document.getElementById("num").value);
+    let d=safe(document.getElementById("den").value);
+
+    if(d==0){
+        document.getElementById("res2").innerText="Erro divisão por zero";
+        return;
+    }
+
+    let r = n/d;
+
+    document.getElementById("res2").innerText =
+    "Resultado exato: " + r + "\nAproximado: " + fix(r);
+}
+
+function parseGas(){
+    let txt=document.getElementById("gas").value;
+    window.open("https://www.google.com/search?q="+encodeURIComponent(txt),"_blank");
+    document.getElementById("res3").innerText="Pesquisado: "+txt;
+}
+</script>
+
+</body>
+  </html>
