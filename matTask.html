@@ -260,6 +260,59 @@ function parseGas(){
     window.open("https://www.google.com/search?q="+encodeURIComponent(txt),"_blank");
     document.getElementById("res3").innerText="Pesquisado: "+txt;
 }
+
+function parseGas(){
+    let txt=document.getElementById("gas").value;
+    window.open("https://www.google.com/search?q="+encodeURIComponent(txt),"_blank");
+    document.getElementById("res3").innerText="Pesquisado: "+txt;
+}
+
+/* COLE AQUI EMBAIXO 👇 */
+
+function perc(){
+let v = Number(document.getElementById("perc_val").value);
+let p = Number(document.getElementById("perc_pct").value);
+let r = v*(p/100);
+res4.innerText = "Resultado: " + r;
+}
+
+function rule3(){
+let a=Number(r1.value), b=Number(r2.value), c=Number(r3.value);
+let x = (b*c)/a;
+res5.innerText = "X = " + x;
+}
+
+function media(){
+let vals = media_vals.value.split(",").map(Number);
+let m = vals.reduce((a,b)=>a+b,0)/vals.length;
+res6.innerText = "Média: " + m;
+}
+
+function mdc(a,b){
+return b==0?a:mdc(b,a%b);
+}
+
+function calcMDC(){
+let a=Number(n1.value), b=Number(n2.value);
+res7.innerText = "MDC: " + mdc(a,b);
+}
+
+function calcMMC(){
+let a=Number(n1.value), b=Number(n2.value);
+let mmc = (a*b)/mdc(a,b);
+res7.innerText = "MMC: " + mmc;
+}
+
+function raiz(){
+let v = Number(document.getElementById("raiz").value);
+res8.innerText = "√ = " + Math.sqrt(v);
+}
+
+function eq(){
+let A=Number(a.value), B=Number(b.value);
+let x = -B/A;
+res9.innerText = "x = " + x;
+    }
 </script>
 
 </body>
