@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carregando...</title>
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial, sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+flex-direction:column;
+}
+
+.title{
+font-size:20px;
+font-weight:600;
+margin-top:15px;
+opacity:0.9;
+}
+
+.spinner{
+width:50px;
+height:50px;
+border:4px solid #1f1f1f;
+border-top:4px solid #fff;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg);}
+}
+
+.sub{
+font-size:12px;
+opacity:0.5;
+margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="spinner"></div>
+
+<div class="title">Nunesxyz.github.io</div>
+<div class="sub">Carregando sistema...</div>
+
+<script>
+setTimeout(()=>{
+window.location.href="index.html";
+},4000);
+</script>
+
+</body>
+</html>
