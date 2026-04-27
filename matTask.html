@@ -50,10 +50,8 @@ body{
     transition:.25s;
 }
 
-.card.active{
-    transform:translateY(-8px);
-    border-color:#fff;
-    box-shadow:0 12px 30px rgba(255,255,255,0.08);
+.card:hover{
+    border-color:#444;
 }
 
 .title{
@@ -84,6 +82,7 @@ button{
     border-radius:10px;
     font-weight:600;
     margin-top:10px;
+    cursor: pointer;
 }
 
 .result{
@@ -91,6 +90,7 @@ button{
     font-size:13px;
     opacity:.8;
     white-space:pre-wrap;
+    min-height: 20px;
 }
 
 .kb{
@@ -106,6 +106,7 @@ button{
     color:#fff;
     border:1px solid #222;
     font-size:13px;
+    margin-top: 0;
 }
 </style>
 </head>
@@ -117,9 +118,10 @@ button{
 
 <div class="grid">
 
+<!-- Calculadora Geral -->
 <div class="card">
 <div class="title"><i data-lucide="calculator"></i> Calculadora Geral</div>
-<input id="expr" readonly>
+<input id="expr" readonly placeholder="Expressão">
 
 <div class="kb">
 <button onclick="typeKey('7')">7</button>
@@ -151,30 +153,57 @@ button{
 <div class="result" id="res1"></div>
 </div>
 
+<!-- NOVO CARD: POTÊNCIA E RAÍZES -->
+<div class="card">
+<div class="title"><i data-lucide="info"></i> Potência & Raízes</div>
+<input id="val_base" readonly placeholder="Número Base">
+<input id="val_exp" readonly placeholder="Expoente (só p/ elevado)">
+
+<div class="kb">
+<button onclick="typeKey('7')">7</button>
+<button onclick="typeKey('8')">8</button>
+<button onclick="typeKey('9')">9</button>
+<button onclick="back()">⌫</button>
+<button onclick="clearFields()">C</button>
+
+<button onclick="typeKey('4')">4</button>
+<button onclick="typeKey('5')">5</button>
+<button onclick="typeKey('6')">6</button>
+<button onclick="calcAdvanced('pow')">xʸ</button>
+<button onclick="calcAdvanced('sqrt')">√</button>
+
+<button onclick="typeKey('1')">1</button>
+<button onclick="typeKey('2')">2</button>
+<button onclick="typeKey('3')">3</button>
+<button onclick="calcAdvanced('cbrt')">∛</button>
+<button onclick="typeKey('0')">0</button>
+</div>
+<div class="result" id="res_adv"></div>
+</div>
+
 <div class="card">
 <div class="title"><i data-lucide="sigma"></i> Fração / Potência</div>
-
-<input id="num" readonly>
-<input id="den" readonly>
+<input id="num" readonly placeholder="Numerador">
+<input id="den" readonly placeholder="Denominador">
 
 <div class="kb">
 <button onclick="typeKey('7')">7</button>
 <button onclick="typeKey('8')">8</button>
 <button onclick="typeKey('9')">9</button>
 <button onclick="typeKey('^')">^</button>
-<button onclick="typeKey('(')">(</button>
+<button onclick="back()">⌫</button>
 
 <button onclick="typeKey('4')">4</button>
 <button onclick="typeKey('5')">5</button>
 <button onclick="typeKey('6')">6</button>
 <button onclick="typeKey('/')">/</button>
-<button onclick="typeKey(')')">)</button>
+<button onclick="typeKey('(')">(</button>
 
 <button onclick="typeKey('1')">1</button>
 <button onclick="typeKey('2')">2</button>
 <button onclick="typeKey('3')">3</button>
 <button onclick="typeKey('!')">!</button>
-<button onclick="back()">⌫</button>
+<button onclick="typeKey(')')">)</button>
 </div>
 
 <button onclick="frac()">Resolver</button>
@@ -183,7 +212,6 @@ button{
 
 <div class="card">
 <div class="title"><i data-lucide="fuel"></i> Conversão</div>
-
 <input id="gas" placeholder="texto por extenso">
 <button onclick="parseGas()">Pesquisar</button>
 <div class="result" id="res3"></div>
@@ -195,7 +223,6 @@ button{
 <script>
 lucide.createIcons();
 
-/* FOCO FIXO */
 let activeField = document.getElementById("expr");
 
 document.querySelectorAll("input").forEach(i=>{
@@ -214,11 +241,17 @@ function back(){
     activeField.value = activeField.value.slice(0,-1);
 }
 
+function clearFields(){
+    if(activeField) activeField.value = "";
+}
+
 /* bloqueio teclado físico */
-["expr","num","den","gas"].forEach(id=>{
+["expr","num","den","gas","val_base","val_exp"].forEach(id=>{
     let el=document.getElementById(id);
-    el.addEventListener("keydown",e=>e.preventDefault());
-    el.addEventListener("paste",e=>e.preventDefault());
+    if(el){
+        el.addEventListener("keydown",e=>e.preventDefault());
+        el.addEventListener("paste",e=>e.preventDefault());
+    }
 });
 
 function safe(e){
@@ -228,31 +261,45 @@ function safe(e){
     }catch{return NaN;}
 }
 
-/* APROXIMADO RESTAURADO */
 function fix(n){
     if(isNaN(n)) return 0;
-    return Math.round(n*100)/100;
+    return Math.round(n*1000)/1000;
 }
 
 function calc(){
     let r = safe(document.getElementById("expr").value);
-    document.getElementById("res1").innerText =
-    "Resultado exato: " + r + "\nAproximado: " + fix(r);
+    document.getElementById("res1").innerText = "Exato: " + r + "\nAproximado: " + fix(r);
 }
 
 function frac(){
     let n=safe(document.getElementById("num").value);
     let d=safe(document.getElementById("den").value);
-
     if(d==0){
-        document.getElementById("res2").innerText="Erro divisão por zero";
+        document.getElementById("res2").innerText="Erro: div por 0";
         return;
     }
-
     let r = n/d;
+    document.getElementById("res2").innerText = "Exato: " + r + "\nAproximado: " + fix(r);
+}
 
-    document.getElementById("res2").innerText =
-    "Resultado exato: " + r + "\nAproximado: " + fix(r);
+function calcAdvanced(tipo){
+    let b = parseFloat(document.getElementById("val_base").value);
+    let e = parseFloat(document.getElementById("val_exp").value);
+    let res = 0;
+    let label = "";
+
+    if(tipo === 'pow'){
+        res = Math.pow(b, e);
+        label = b + " ^ " + e;
+    } else if(tipo === 'sqrt'){
+        res = Math.sqrt(b);
+        label = "√" + b;
+    } else if(tipo === 'cbrt'){
+        res = Math.cbrt(b);
+        label = "∛" + b;
+    }
+
+    document.getElementById("res_adv").innerText = label + " = " + res + "\nAproximado: " + fix(res);
 }
 
 function parseGas(){
