@@ -236,11 +236,18 @@ body {
     background: #111;
     border: 1px solid #333;
     color: #fff;
-    font-size: 10px;
-    padding: 3px 5px;
+    font-size: 12px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 6px;
     cursor: pointer;
+    font-family: monospace;
+    line-height: 1;
 }
+
 </style>
 </head>
 
@@ -292,13 +299,19 @@ Redação
 Redação V2
 </div>
 
+<div class="script-card">
+<i data-lucide="volume-2"></i>
+Speak
+<br>
+<span style="opacity:0.5;font-size:12px;">Em breve...</span>
+</div>
 
-<div class="section-title" style="margin-top: 30px;">Nunesxyz & Games</div>
-
-<a class="script-card" href="Hollow-Knight.html">
-<i data-lucide="gamepad-2"></i>
-Hollow Knight
-</a>
+<div class="script-card">
+<i data-lucide="book-open"></i>
+Apostilas
+<br>
+<span style="opacity:0.5;font-size:12px;">Em breve...</span>
+</div>
     
 <h2 id="equipe-heading">Equipe</h2>
 
@@ -340,7 +353,7 @@ Hollow Knight
 
 <div class="controls">
 <button onclick="prev()"><</button>
-<button onclick="toggle()">*</button>
+<button onclick="toggle()" id="playBtn">𓊕</button>
 <button onclick="next()">></button>
 </div>
 </div>
@@ -403,12 +416,16 @@ player.classList.add("playing");
 }
 
 function toggle(){
+const btn = document.querySelector(".controls button:nth-child(2)");
+
 if(audio.paused){
 audio.play().catch(()=>{});
 player.classList.add("playing");
+btn.innerText = "𓊕";
 }else{
 audio.pause();
 player.classList.remove("playing");
+btn.innerText = "▶";
 }
 }
 
@@ -421,7 +438,7 @@ let drag=false,ox=0,oy=0;
 
 player.addEventListener("pointerdown",(e)=>{
 drag=true;
-player.setPointerCapture(e.pointerId);
+try{player.setPointerCapture(e.pointerId);}catch{}
 ox=e.clientX-player.offsetLeft;
 oy=e.clientY-player.offsetTop;
 });
