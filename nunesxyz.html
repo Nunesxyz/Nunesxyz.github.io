@@ -404,7 +404,12 @@ document.getElementById("redacaoIA").onclick = () => {
 document.getElementById("jsCustom").onclick = () => {
     openMenu(jsCustomJS);
 };
-
+/* AQUI entra o botão copiar */
+document.getElementById("copyBtn").onclick = async () => {
+    const text = document.getElementById("scriptBox").value;
+    await navigator.clipboard.writeText(text);
+};
+    
 /* PLAYER */
 let i=0;
 const audio=document.getElementById("audio");
