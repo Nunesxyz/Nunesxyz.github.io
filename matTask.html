@@ -247,14 +247,29 @@ function clearFields(){
     if(activeField) activeField.value = "";
 }
 
-/* bloqueio teclado físico */
-["expr","num","den","gas","val_base","val_exp"].forEach(id=>{
+["expr","num","den","val_base","val_exp"].forEach(id=>{
     let el=document.getElementById(id);
     if(el){
-        el.addEventListener("keydown",e=>e.preventDefault());
+        el.addEventListener("keydown",e=>{
+            const permitidos = /[0-9+\-*/().^]/;
+            if(!permitidos.test(e.key) && e.key !== "Backspace"){
+                e.preventDefault();
+            }
+        });
         el.addEventListener("paste",e=>e.preventDefault());
     }
 });
+
+/* campo de texto (extenso) */
+let gasEl = document.getElementById("gas");
+if(gasEl){
+    gasEl.addEventListener("keydown",e=>{
+        const permitido = /[a-zA-Z0-9\s]/;
+        if(!permitido.test(e.key) && e.key !== "Backspace"){
+            e.preventDefault();
+        }
+    });
+                                }
 
 function safe(e){
     try{
