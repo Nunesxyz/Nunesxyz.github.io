@@ -41,7 +41,7 @@ body {
     gap: 8px;
 }
 
-/* AREA DO PDF (placeholder) */
+/* AREA DO PDF */
 .pdf-area {
     width: 100%;
     height: 70vh;
@@ -51,7 +51,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
+    overflow: hidden;
 }
 
 /* CONTROLES */
@@ -87,24 +87,6 @@ body {
 .controls button:hover {
     border-color: #fff;
 }
-
-/* INPUT */
-.controls input {
-    width: 60px;
-    height: 36px;
-    background: #111;
-    border: 1px solid #333;
-    color: #fff;
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* TEXTO */
-.page-info {
-    font-size: 12px;
-    opacity: 0.6;
-    margin: 0 5px;
-}
 </style>
 </head>
 
@@ -117,33 +99,16 @@ body {
 </div>
 
 <div class="pdf-area">
-<iframe 
-    src="https://drive.google.com/file/d/1JP76a15esH7TP0m-rZDy8OIPB1U5d4OR/preview"
-    width="100%"
-    height="100%"
-    style="border:0; border-radius:14px;">
-</iframe>
+<img 
+    src="https://raw.githubusercontent.com/Nunesxyz/Nunesxyz.github.io/main/HCGMpdf.png"
+    style="width:100%; height:100%; object-fit:cover;">
 </div>
 
-</div>
-
-<!-- CONTROLES -->
+<!-- CONTROLES (apenas download) -->
 <div class="controls">
 
-<button>
-<i data-lucide="chevron-left"></i>
-</button>
-
-<span class="page-info">1 / 300</span>
-
-<button>
-<i data-lucide="chevron-right"></i>
-</button>
-
-<input type="number" placeholder="Pg">
-
-<button>
-Ir
+<button onclick="window.open('https://drive.google.com/uc?export=download&id=1JP76a15esH7TP0m-rZDy8OIPB1U5d4OR','_blank')">
+<i data-lucide="download"></i>
 </button>
 
 </div>
