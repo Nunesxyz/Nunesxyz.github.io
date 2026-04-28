@@ -41,7 +41,7 @@ body {
     gap: 8px;
 }
 
-/* AREA DO PDF (placeholder) */
+/* AREA DO PDF */
 .pdf-area {
     width: 100%;
     height: 70vh;
@@ -51,7 +51,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
+    overflow: hidden;
 }
 
 /* CONTROLES */
@@ -87,24 +87,6 @@ body {
 .controls button:hover {
     border-color: #fff;
 }
-
-/* INPUT */
-.controls input {
-    width: 60px;
-    height: 36px;
-    background: #111;
-    border: 1px solid #333;
-    color: #fff;
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* TEXTO */
-.page-info {
-    font-size: 12px;
-    opacity: 0.6;
-    margin: 0 5px;
-}
 </style>
 </head>
 
@@ -117,7 +99,9 @@ body {
 </div>
 
 <div class="pdf-area">
-Visualização do PDF
+<img 
+    src="https://raw.githubusercontent.com/Nunesxyz/Nunesxyz.github.io/main/apostilas/PMpdf.png"
+    style="width:100%; height:100%; object-fit:cover;">
 </div>
 
 </div>
@@ -125,20 +109,8 @@ Visualização do PDF
 <!-- CONTROLES -->
 <div class="controls">
 
-<button>
-<i data-lucide="chevron-left"></i>
-</button>
-
-<span class="page-info">1 / 300</span>
-
-<button>
-<i data-lucide="chevron-right"></i>
-</button>
-
-<input type="number" placeholder="Pg">
-
-<button>
-Ir
+<button onclick="window.open('https://drive.google.com/uc?export=download&id=1dckEdVoAJuxXxGg_LipqMeDQEQYl4tFt','_blank')">
+<i data-lucide="download"></i>
 </button>
 
 </div>
